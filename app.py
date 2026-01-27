@@ -262,8 +262,19 @@ with col_results:
                 except Exception as e:
                     st.error(f"Error displaying chart: {e}")
             
-            if result.get('result_df') is not None and not result['result_df'].empty:
-                st.dataframe(result['result_df'])
+            result_df = result.get('result_df')
+            if result_df is not None:
+                if isinstance(result_df, pd.DataFrame):
+                    if not result_df.empty:
+                        st.dataframe(result_df)
+                elif isinstance(result_df, (list, tuple)):
+                    for item in result_df:
+                        if isinstance(item, pd.DataFrame) and not item.empty:
+                             st.dataframe(item)
+                        else:
+                            st.write(item)
+                else:
+                    st.write(result_df)
             
             with st.popover("Show Code"):
                 st.code(result['code'], language="python")
