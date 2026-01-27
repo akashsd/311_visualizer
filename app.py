@@ -254,8 +254,13 @@ with col_results:
         with st.expander(f"#{i+1}: {result['intent'][:50]}...", expanded=(i == len(st.session_state['analysis_history']) - 1)):
             st.write(f"**Query:** {result['intent']}")
             
-            if result.get('fig'):
-                st.plotly_chart(result['fig'], use_container_width=True)
+            fig = result.get('fig')
+            # Check if fig is a valid plotly object or dict-like (not None) before plotting
+            if fig is not None:
+                try:
+                    st.plotly_chart(fig, use_container_width=True)
+                except Exception as e:
+                    st.error(f"Error displaying chart: {e}")
             
             if result.get('result_df') is not None and not result['result_df'].empty:
                 st.dataframe(result['result_df'])
