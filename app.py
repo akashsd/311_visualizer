@@ -101,8 +101,15 @@ User Intent: {user_intent}
 Write a Python script to analyze `df` and visualize the results.
 Return ONLY valid Python code wrapped in ```python blocks.
 Assign the final figure (if any) to variable `fig` and data tables to `result_df`.
-Use `plotly.express` (aliased as `px`) for plots.
-You can also use `plotly.graph_objects` (aliased as `go`) for more complex figures.
+
+AVAILABLE LIBRARIES:
+You may ONLY use the following libraries:
+- pandas (aliased as pd)
+- plotly.express (aliased as px)
+- plotly.graph_objects (aliased as go)
+- streamlit (aliased as st) - though usually not needed for logic, only display.
+Do NOT import or use any other libraries (like matplotlib, seaborn, folium, etc) as they are not installed.
+
 Ensure columns used exist in the dataframe.
 Columns available: {list(df.columns)}
 
