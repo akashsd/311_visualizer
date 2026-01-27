@@ -108,7 +108,11 @@ Columns available: {list(df.columns)}
 
 IMPORTANT: If the user asks for a map and you only have 'Lat_Long Location', you MUST split this column into 'Latitude' and 'Longitude' numeric columns before plotting. 
 Use this pattern:
-df[['Latitude', 'Longitude']] = df['Lat_Long Location'].str.strip('()').str.split(', ', expand=True).astype(float)
+# Split by comma, handling potential spaces
+lat_long = df['Lat_Long Location'].astype(str).str.strip('()').str.split(',', expand=True)
+if len(lat_long.columns) == 2:
+    df['Latitude'] = lat_long[0].astype(float)
+    df['Longitude'] = lat_long[1].astype(float)
 """
     
     # We can pass column info again to be safe
