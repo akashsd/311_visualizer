@@ -1,0 +1,5 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+311_Service_Requests_October_1,_2020_to_Present_20260127.csv
