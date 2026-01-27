@@ -258,7 +258,12 @@ with col_results:
             # Check if fig is a valid plotly object or dict-like (not None) before plotting
             if fig is not None:
                 try:
-                    st.plotly_chart(fig, use_container_width=True)
+                    # Handle multiple figures returned as list/tuple
+                    if isinstance(fig, (list, tuple)):
+                        for f in fig:
+                             st.plotly_chart(f, use_container_width=True)
+                    else:
+                        st.plotly_chart(fig, use_container_width=True)
                 except Exception as e:
                     st.error(f"Error displaying chart: {e}")
             
