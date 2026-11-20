@@ -9,6 +9,9 @@ Workflow:
      `python carb_query.py query <URL> [key=value ...]`
      e.g. python carb_query.py query https://example.carb.endpoint/data.csv year=2024
 
+Shortcuts: `python carb_query.py epa` and `python carb_query.py carb` run the
+sample values defined near the top of this file.
+
 Requires: pip install requests
 """
 
@@ -19,6 +22,18 @@ from urllib.parse import urljoin
 import requests
 
 PAGE_URL = "https://ww2.arb.ca.gov/capp/cst/rdi/air-quality-and-emissions-data"
+
+# ---- Sample values (edit these) --------------------------------------------
+# UNVERIFIED guess: replace with the real endpoint printed by `discover`.
+CARB_URL = "https://ww2.arb.ca.gov/REPLACE-WITH-ENDPOINT-FROM-DISCOVER"
+CARB_PARAMS = {"pollutant": "PM25", "site": "Los Angeles", "start": "2024-01-01", "end": "2024-01-31"}
+
+# Documented alternative that works today (CA monitors, incl. CARB-operated):
+# EPA AQS API. Free key: GET https://aqs.epa.gov/data/api/signup?email=YOU@example.com
+# then use the key emailed to you. Param 88101 = PM2.5, state 06 = California.
+EPA_URL = "https://aqs.epa.gov/data/api/dailyData/byState"
+EPA_PARAMS = {"email": "YOU@example.com", "key": "YOUR_KEY", "param": "88101",
+              "bdate": "20240101", "edate": "20240131", "state": "06"}
 
 # Identify yourself honestly. If the site rejects this (e.g. HTTP 419/403),
 # email webmaster@arb.ca.gov rather than spoofing a browser.
@@ -65,8 +80,12 @@ def query(url, params):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2 or sys.argv[1] not in ("discover", "query"):
+    if len(sys.argv) < 2 or sys.argv[1] not in ("discover", "query", "epa", "carb"):
         print(__doc__)
+    elif sys.argv[1] == "epa":      # run the sample EPA AQS query above
+        query(EPA_URL, EPA_PARAMS)
+    elif sys.argv[1] == "carb":     # run the sample CARB query above
+        query(CARB_URL, CARB_PARAMS)
     elif sys.argv[1] == "discover":
         discover()
     else:
